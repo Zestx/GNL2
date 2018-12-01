@@ -27,42 +27,55 @@ void *ft_realloc(char *buffer, int old_size, int new_size)
 	return (new_buffer);
 }
 
+struct buff {
+	char	buffer[BUFF_SIZE];
+	int	start;
+	int	end;
+};
+
+static int read_buffer(int fd, struct buff *buffer)
+{
+	int n;
+
+	if ((buffer->start < buffer->end))
+		return 1;
+
+	n = read(fd, buffer->buffer, BUFF_SIZE);
+	if (n < 0)
+		return -1;
+	if (n == 0)
+		return 0;
+	buffer->start = 0;
+	buffer->end = n;
+	return 1;
+}
+
 int get_next_line(const int fd, char **line)
 {
-	static char buffer[BUFF_SIZE];
+	static struct buff buffer;
 	char *ptr;
 	int curr_size;
 	int size;
-	static int start;
-	static int end;
+	int n;
 
 	ptr = NULL;
 	curr_size = 0;
-
-	//If the buffer is empty..
 	while (!ptr)			//While there's no '\n' read..
 	{
-		if ((start == end)) {
-			int n = read(fd, buffer, BUFF_SIZE);
-			if (n < 0)
-				return -1;
-			if (n == 0)
-				return 0;
-			start = 0;
-			end = n;
-		}
-		ptr = ft_memchr(&buffer[start], '\n', end - start);
-		if (!ptr) {
-			size = end - start;
-		} else {
+		if ((n = read_buffer(fd, &buffer)) <= 0)
+			return n;
+		ptr = ft_memchr(&buffer.buffer[buffer.start], '\n', buffer.end - buffer.start);
+		if (!ptr)
+			size = buffer.end - buffer.start;
+		else
+		{
 			*ptr = '\0';
-			size = (ptr - buffer) - start + 1;
+			size = (ptr - buffer.buffer) - buffer.start + 1;
 		}
 		*line = ft_realloc(*line, curr_size, curr_size + size);
-		ft_memcpy(*line + curr_size, &buffer[start], size);
+		ft_memcpy(*line + curr_size, &buffer.buffer[buffer.start], size);
 		curr_size += size;
-		start += size;
+		buffer.start += size;
 	}
-
 	return (1);
 }
