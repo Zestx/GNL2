@@ -18,10 +18,11 @@ int		main(void)
     int		fd;
     char	*line;
 
-    fd = open("lorem_ipsum", O_RDONLY);
+    //fd = open("lorem_ipsum", O_RDONLY);
+    fd = 0;
     while (get_next_line(fd, &line) > 0)
     {
-        printf("%s|\n", line);
+        printf("%s\n", line);
         free(line);
     }
     close(fd);

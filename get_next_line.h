@@ -19,7 +19,7 @@
 # include <unistd.h>
 # include <string.h>
 # include "libft/libft.h"
-# define BUFF_SIZE 37
+# define BUFF_SIZE 12
 # define SPR '\n'
 
 int		get_next_line(const int fd, char **line);

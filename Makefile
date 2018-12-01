@@ -1,17 +1,24 @@
 CC=gcc
-CFLAGS=-Wall -Wextra -Werror --pedantic
+CFLAGS := -Wall -Wextra --pedantic
+#CFLAGS += -Werror
+CFLAGS += -Wimplicit-function-declaration
+CFLAGS += -g -O0
 
-all: lib
-	$(CC) $(CFLAGS) -g -o  gnl.o -c get_next_line.c
-	$(CC) $(CFLAGS) -g -o  main.o -c main.c
-	$(CC) -g -o test_gnl main.o gnl.o -I libft -L libft/ -lft
+all: test_gnl
+
+test_gnl: libft/libft.a get_next_line.o main.o
+	$(CC) $(CFLAGS) -o test_gnl $^
 
 
-lib:
-	make -C libft/ fclean && make -C libft/
+libft/libft.a:
+	make -C libft/
 
 clean:
 	rm *.o
 
 fclean: clean
 	rm test_gnl
+
+
+export CFLAGS
+export CC
