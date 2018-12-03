@@ -6,76 +6,69 @@
 /*   By: qbackaer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/07 20:00:19 by qbackaer          #+#    #+#             */
-/*   Updated: 2018/11/22 18:56:10 by qbackaer         ###   ########.fr       */
+/*   Updated: 2018/12/03 19:50:18 by qbackaer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 
-void *ft_realloc(char *buffer, int old_size, int new_size)
+static void		*ft_realloc(char *buffer, int old_size, int new_size)
 {
 	char *new_buffer;
 
 	new_buffer = malloc(new_size);
 	if (!new_buffer)
 		return (NULL);
-	//If the buffer is null, this part is useless
-	if (old_size) {
+	if (old_size)
+	{
 		ft_memcpy(new_buffer, buffer, old_size);
 		free(buffer);
 	}
 	return (new_buffer);
 }
 
-struct buff {
-	char	buffer[BUFF_SIZE];
-	int	start;
-	int	end;
-};
-
-static int read_buffer(int fd, struct buff *buffer)
+static int		read_buffer(int fd, t_buffer *buff)
 {
 	int n;
 
-	if ((buffer->start < buffer->end))
-		return 1;
-
-	n = read(fd, buffer->buffer, BUFF_SIZE);
+	if ((buff->start < buff->end))
+		return (1);
+	n = read(fd, buff->rd, BUFF_SIZE);
+	printf("READ RETURN: %d\n", n);
 	if (n < 0)
-		return -1;
+		return (-1);
 	if (n == 0)
-		return 0;
-	buffer->start = 0;
-	buffer->end = n;
-	return 1;
+		return (0);
+	buff->start = 0;
+	buff->end = n;
+	return (1);
 }
 
-int get_next_line(const int fd, char **line)
+int				get_next_line(const int fd, char **line)
 {
-	static struct buff buffer;
-	char *ptr;
-	int curr_size;
-	int size;
-	int n;
+	static t_buffer	buff;
+	t_util			ut;
 
-	ptr = NULL;
-	curr_size = 0;
-	while (!ptr)			//While there's no '\n' read..
+	ut.ptr = NULL;
+	ut.curr_size = 0;
+	while (!ut.ptr)
 	{
-		if ((n = read_buffer(fd, &buffer)) <= 0)
-			return n;
-		ptr = ft_memchr(&buffer.buffer[buffer.start], '\n', buffer.end - buffer.start);
-		if (!ptr)
-			size = buffer.end - buffer.start;
+		if ((ut.n = read_buffer(fd, &buff)) <= 0)
+			return (ut.n);
+		ut.ptr = ft_memchr(&buff.rd[buff.start], SP, buff.end - buff.start);
+		if (!ut.ptr)
+			ut.size = buff.end - buff.start;
 		else
 		{
-			*ptr = '\0';
-			size = (ptr - buffer.buffer) - buffer.start + 1;
+			*ut.ptr = '\0';
+			ut.size = (ut.ptr - buff.rd) - buff.start + 1;
 		}
-		*line = ft_realloc(*line, curr_size, curr_size + size);
-		ft_memcpy(*line + curr_size, &buffer.buffer[buffer.start], size);
-		curr_size += size;
-		buffer.start += size;
+		if (!(*line = ft_realloc(*line, ut.curr_size, ut.curr_size + ut.size)))
+			return (-1);
+		ft_memcpy(*line + ut.curr_size, &buff.rd[buff.start], ut.size);
+		ut.curr_size += ut.size;
+		buff.start += ut.size;
 	}
 	return (1);
 }
