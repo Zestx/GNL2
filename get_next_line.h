@@ -6,7 +6,7 @@
 /*   By: qbackaer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/24 19:41:42 by qbackaer          #+#    #+#             */
-/*   Updated: 2018/12/05 18:00:09 by qbackaer         ###   ########.fr       */
+/*   Updated: 2018/12/05 19:39:02 by qbackaer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include <unistd.h>
 # include <string.h>
 # include "./libft/libft.h"
-# define BUFF_SIZE 12
+# define BUFF_SIZE 4092
 # define S '\n'
 
 typedef struct	s_buffer

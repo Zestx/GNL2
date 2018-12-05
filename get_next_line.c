@@ -6,27 +6,26 @@
 /*   By: qbackaer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/07 20:00:19 by qbackaer          #+#    #+#             */
-/*   Updated: 2018/12/05 17:58:27 by qbackaer         ###   ########.fr       */
+/*   Updated: 2018/12/05 19:40:50 by qbackaer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
 
-static void		*ft_realloc(char *buffer, int old_size, int new_size)
+static void		*ft_realloc(char *line, int old_size, int new_size)
 {
-	char *new_buffer;
+	char *new_line;
 
-	new_buffer = malloc(new_size + 1);
-	if (!new_buffer)
+	new_line = malloc(new_size + 1);
+	if (!new_line)
 		return (NULL);
 	if (old_size)
 	{
-		ft_memcpy(new_buffer, buffer, old_size);
-		new_buffer[new_size] = '\0';
-		free(buffer);
+		ft_memcpy(new_line, line, old_size);
+		new_line[new_size] = '\0';
+		free(line);
 	}
-	return (new_buffer);
+	return (new_line);
 }
 
 static int		read_buffer(int fd, t_buffer *buff)
