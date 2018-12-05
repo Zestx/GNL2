@@ -6,7 +6,7 @@
 /*   By: qbackaer <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/10/24 19:41:42 by qbackaer          #+#    #+#             */
-/*   Updated: 2018/12/03 17:43:00 by qbackaer         ###   ########.fr       */
+/*   Updated: 2018/12/05 18:00:09 by qbackaer         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,20 +18,20 @@
 # include <fcntl.h>
 # include <unistd.h>
 # include <string.h>
-# include "libft/libft.h"
+# include "./libft/libft.h"
 # define BUFF_SIZE 12
-# define SP '\n'
+# define S '\n'
 
 typedef struct	s_buffer
 {
 	char	rd[BUFF_SIZE];
-	int		start;
+	int		str;
 	int		end;
 }				t_buffer;
 
 typedef struct	s_util
 {
-	char	*ptr;
+	char	*p;
 	int		curr_size;
 	int		size;
 	int		n;
